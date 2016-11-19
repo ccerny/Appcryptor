@@ -11,8 +11,42 @@
     tools:context="cms341.appcryptor.MainActivity">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Appcryptor" />
+        android:text="Appcryptor"
+        android:fontFamily="monospace"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/text_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below = "@id/title"
+        android:layout_marginTop="120dp"
+        android:fontFamily="monospace"
+        android:text="Please enter your text here"/>
+
+
+    <Button
+        android:id="@+id/decrypt_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Decrypt"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="11dp" />
+
+    <Button
+        android:id="@+id/encrypt_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Encrypt"
+        android:layout_marginRight="20dp"
+        android:layout_alignBottom="@+id/decrypt_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
