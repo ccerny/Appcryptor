@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/Documents/CMS341/Appcryptor/app/src/main/res/audio";
+        mFileName += "/audiorecordtest.3gp";
 
         message = (EditText) findViewById(R.id.text_entry);
         try {
@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         0));
         setContentView(recordingLayout);
-
     }
 
     public void encryptor(View v) throws BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
