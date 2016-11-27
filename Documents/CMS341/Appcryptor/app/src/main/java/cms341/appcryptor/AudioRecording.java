@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -18,10 +18,10 @@ import java.io.IOException;
 
 public class AudioRecording extends AppCompatActivity {
     private static final String LOG_TAG = "AudioRecordTest";
-    String mFileName = null;
-
-    private RecordButton mRecordButton = null;
+    Button recordButton;
     private MediaRecorder mRecorder = null;
+    boolean mStartRecording = true;
+    File tempFile;
 
     private PlayButton mPlayButton = null;
     private MediaPlayer mPlayer = null;
@@ -31,23 +31,31 @@ public class AudioRecording extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.audio_recording);
+        try {
+            // create temporary file to store recording
+            tempFile = File.createTempFile(
+                    "tempFile", ".3gp", getFilesDir());
+        } catch (IOException e) {
 
-        /*super.onCreate(icicle);
+        }
 
-        LinearLayout ll = new LinearLayout(this);
-        mRecordButton = new RecordButton(this);
-        ll.addView(mRecordButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        mPlayButton = new PlayButton(this);
-        ll.addView(mPlayButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        setContentView(ll);*/
+        System.err.println("\n\nDoes Exisits:?? " + tempFile.exists()
+                + "  File path: " + tempFile.getAbsolutePath());
+
+        recordButton = (Button)findViewById(R.id.record);
+
+        View.OnClickListener clicker = new View.OnClickListener() {
+            public void onClick(View v) {
+                onRecord(mStartRecording);
+                if (mStartRecording) {
+                    recordButton.setText("Stop recording");
+                } else {
+                    recordButton.setText("Start recording");
+                }
+                mStartRecording = !mStartRecording;
+            }
+        };
+        recordButton.setOnClickListener(clicker);
     }
 
 
@@ -67,10 +75,33 @@ public class AudioRecording extends AppCompatActivity {
         }
     }
 
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFile(tempFile.getPath());
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncodingBitRate(12200);
+        mRecorder.setMaxDuration(5000);
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource(mFileName);
+            mPlayer.setDataSource(tempFile.getPath());
             mPlayer.prepare();
             mPlayer.start();
         } catch (IOException e) {
@@ -83,51 +114,7 @@ public class AudioRecording extends AppCompatActivity {
         mPlayer = null;
     }
 
-    private void startRecording() {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mRecorder.setMaxDuration(5000);
 
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-
-        mRecorder.start();
-    }
-
-    private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
-        //Add method here to go to next view
-    }
-
-    class RecordButton extends Button {
-        boolean mStartRecording = true;
-
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                onRecord(mStartRecording);
-                if (mStartRecording) {
-                    setText("Stop recording");
-                } else {
-                    setText("Start recording");
-                }
-                mStartRecording = !mStartRecording;
-            }
-        };
-
-        public RecordButton(Context ctx) {
-            super(ctx);
-            setText("Start recording");
-            setOnClickListener(clicker);
-        }
-    }
 
     class PlayButton extends Button {
         boolean mStartPlaying = true;
