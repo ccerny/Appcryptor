@@ -119,6 +119,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadAudioRecording( View v ) {
         startActivity( new Intent( getApplicationContext( ),
-                cms341.appcryptor.AudioRecording.class));
+                AudioRecording.class));
     }
 }

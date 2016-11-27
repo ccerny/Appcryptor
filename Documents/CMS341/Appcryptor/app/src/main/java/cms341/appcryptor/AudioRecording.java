@@ -26,8 +26,6 @@ public class AudioRecording extends AppCompatActivity {
     private PlayButton mPlayButton = null;
     private MediaPlayer mPlayer = null;
 
-    LinearLayout recordingLayout = new LinearLayout(this);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
