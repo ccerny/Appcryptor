@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.MediaController;
+import android.widget.VideoView;
+import android.widget.Button;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
